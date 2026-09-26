@@ -1,0 +1,33 @@
+# Data never belongs in this repository. Inputs and results are deposited on
+# Zenodo (10.5281/zenodo.19859581); raw reads are in SRA (PRJNA1457742).
+*.rds
+*.RData
+*.tsv
+*.csv
+*.xlsx
+*.tsv.gz
+*.csv.gz
+*.fa
+*.fna
+*.faa
+*.gff
+*.xml
+*.tree
+*.biom
+*.h5
+
+# Figures are rebuilt by the scripts
+*.pdf
+*.png
+*.svg
+
+# Environment and caches
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+renv/library/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
