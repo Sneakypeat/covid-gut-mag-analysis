@@ -51,9 +51,6 @@ and the Zenodo deposit staging, which are publication plumbing rather than
 analysis; and the metabolic-support figure and its supporting analyses, which
 were withdrawn from the manuscript.
 
-## Contributor
-
-[Sneakypeat](https://github.com/Sneakypeat)
 
 ## Citation
 
