@@ -249,7 +249,7 @@ supp1 <- ((p_qc + labs(tag = "a") + tag) | (wrap_elements(full = p_qc_marg) + la
          (p_zoe + labs(tag = "d") + tag) +
   plot_layout(heights = c(1, 0.62, 1)) +
   plot_annotation(
-    title = sprintf("Supplementary Figure 1. Quality control, community composition and ZOE reference concordance (%d MAGs, %d donors)",
+    title = sprintf("Quality control, community composition and ZOE reference concordance (%d MAGs, %d donors)",
                     ntaxa(ps), nsamples(ps)),
     theme = theme(plot.title = element_text(face = "bold", size = 9)))
 ggsave(file.path(OUTDIR, "Supplementary_Figure_1_n76.pdf"), supp1, width = 8.27, height = 11.69,

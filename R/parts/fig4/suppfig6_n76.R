@@ -185,7 +185,7 @@ supp6 <- (top + plot_layout(widths = c(1.7, 1))) /
   (bottom + plot_layout(widths = c(1, 1.45))) +
   plot_layout(heights = c(1, 1.25)) +
   plot_annotation(
-    title = "Supplementary Figure 6. CAMPER module robustness, contributing taxa and carriage; KEGG orthologue shifts (n = 76)",
+    title = "CAMPER module robustness, contributing taxa and carriage; KEGG orthologue shifts (n = 76)",
     theme = theme(plot.title = element_text(face = "bold", size = 12)))
 # Scaled by 0.899 to fit A4 landscape; the aspect ratio is
 # unchanged, so no panel is stretched relative to the others.

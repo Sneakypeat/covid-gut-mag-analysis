@@ -107,7 +107,7 @@ pA <- ggplot(sig_long, aes(set, value, fill = set)) +
   scale_fill_manual(values = c("grey70", "#3B6FB6", "#5AAE61")) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.22))) +
   labs(title = "Phylogenetic signal survives completeness adjustment",
-       subtitle = "Reviewer 1 item 2. 999 permutations; lambda by likelihood ratio",
+       subtitle = "999 permutations; lambda by likelihood ratio",
        x = NULL, y = "Statistic") +
   theme_bw(base_size = 9) +
   theme(plot.title = element_text(face = "bold", size = 9),
@@ -186,7 +186,7 @@ pC <- ggplot(r2_tab %>% mutate(Predictor = factor(Predictor, rev(Predictor))),
   scale_fill_manual(values = c("FALSE" = "grey75", "TRUE" = "#3B6FB6")) +
   scale_x_continuous(limits = c(0, 1), expand = expansion(mult = c(0, 0.16))) +
   labs(title = "Guild, not genome quality, explains functional load",
-       subtitle = "Reviewer 1 item 5. Variance in functional load explained",
+       subtitle = "Variance in functional load explained",
        x = expression(R^2), y = NULL) +
   theme_bw(base_size = 9) +
   theme(plot.title = element_text(face = "bold", size = 9),
@@ -236,7 +236,7 @@ pE <- ggplot(cd, aes(n_guilds, stability_ARI)) +
                     labels = c("Swept", "Chosen"), name = NULL) +
   scale_size_continuous(range = c(2, 6), labels = scales::percent, name = "Noise") +
   labs(title = "Guild count against partition stability",
-       subtitle = "Reviewer 1 item 4. ARI across six seeds at each setting",
+       subtitle = "ARI across six seeds at each setting",
        x = "Guilds", y = "Stability (mean ARI across seeds)") +
   theme_bw(base_size = 9) +
   theme(plot.title = element_text(face = "bold", size = 9),
@@ -445,11 +445,11 @@ supp4 <- ((pA + labs(tag = "a") + tag) | (pB + labs(tag = "b") + tag) | (pC + la
          ((pG + labs(tag = "g") + tag) | (pH + labs(tag = "h") + tag) | (pI + labs(tag = "i") + tag)) &
   small_text
 supp4 <- supp4 + plot_annotation(
-    title = "Supplementary Figure 4. Reviewer-response robustness checks on the 76-donor rebuild",
+    title = NULL,
     theme = theme(plot.title = element_text(face = "bold", size = 13)))
 # canvas follows the panels rather than the page: square areas need the room
-ggsave(file.path(OUTDIR, "Supplementary_Figure_4_n76.pdf"), supp4, width = 12, height = 14,
+ggsave(file.path(OUTDIR, "Supplementary_Figure_8_n76.pdf"), supp4, width = 12, height = 14,
        device = cairo_pdf, bg = "transparent")
 
 writeLines(STATS, file.path(OUTDIR, "SuppFig4_STATS_n76.txt"))
-message("DONE -> ", file.path(OUTDIR, "Supplementary_Figure_4_n76.pdf"))
+message("DONE -> ", file.path(OUTDIR, "Supplementary_Figure_8_n76.pdf"))

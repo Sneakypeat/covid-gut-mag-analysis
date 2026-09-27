@@ -33,7 +33,7 @@ ggsave <- function(..., bg = "transparent") ggplot2::ggsave(..., bg = bg)
 
 BASE   <- Sys.getenv("COVID_MAG_BASE", unset = getwd())
 N76    <- file.path(BASE, "result2/n76")
-EXT    <- file.path(N76, "supp_fig/external_validation/analysis")
+EXT    <- file.path(N76, "supp_fig/sources/external_validation/analysis")
 OUTDIR <- file.path(N76, "supp_fig")
 source(file.path(BASE, "taxon_italics_n76.R"))   # md_taxon(): taxon names in italics
 STATS <- c(); say <- function(...) { l <- paste0(...); message(l); STATS <<- c(STATS, l) }
@@ -69,7 +69,7 @@ fo <- eff %>%
                                  "Enterobacteriaceae / commensal balance",
                                  "Enterobacteriaceae abundance")))
 het <- fo %>% filter(kind == "Pooled") %>%
-  mutate(txt = sprintf("pooled g = %.2f (%.2f, %.2f)\nI² = %.0f%%, p = %.3f",
+  mutate(txt = sprintf("pooled g = %.2f (%.2f, %.2f)\nheterogeneity: I² = %.0f%%, Cochran's Q p = %.3f",
                        hedges_g, ci_low, ci_high, I2, heterogeneity_p))
 say("## a. pooled external effects (Hedges' g, negative = lower in cases)")
 for (i in seq_len(nrow(het))) with(het[i, ],
@@ -217,11 +217,11 @@ supp7 <- (pA + labs(tag = "a") + tag) / (pB + labs(tag = "b") + tag) /
   (pC + labs(tag = "c") + tag) +
   plot_layout(heights = c(1.25, 1, 0.75)) +
   plot_annotation(
-    title = "Supplementary Figure 7. Replication of the read-level endpoints\nin three external COVID-19 cohorts",
+    title = "Replication of the read-level endpoints\nin three external COVID-19 cohorts",
     theme = theme(plot.title = element_text(face = "bold", size = 10)))
 # Scaled by 0.880 to fit A4 portrait; the aspect ratio is
 # unchanged, so no panel is stretched relative to the others.
-ggsave(file.path(OUTDIR, "Supplementary_Figure_7_n76.pdf"), supp7, width = 8.27, height = 11.3,
+ggsave(file.path(OUTDIR, "Supplementary_Figure_2_n76.pdf"), supp7, width = 8.27, height = 11.3,
        units = "in", device = cairo_pdf, limitsize = FALSE)
 writeLines(STATS, file.path(OUTDIR, "SuppFig7_STATS_n76.txt"))
-message("DONE -> Supplementary_Figure_7_n76.pdf")
+message("DONE -> Supplementary_Figure_2_n76.pdf")

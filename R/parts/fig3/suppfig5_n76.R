@@ -208,7 +208,7 @@ supp5 <- ((pA + labs(tag = "a") + tag) | (pB + labs(tag = "b") + tag)) /
          (pD + labs(tag = "d") + tag) +
   plot_layout(heights = c(1, 1, 0.9)) +
   plot_annotation(
-    title = sprintf("Supplementary Figure 5. Clustering-method comparison for the functional guilds (%d MAGs)", nrow(meth)),
+    title = sprintf("Clustering-method comparison for the functional guilds (%d MAGs)", nrow(meth)),
     theme = theme(plot.title = element_text(face = "bold", size = 13)))
 # Scaled by 0.636 to fit A4 portrait; the aspect ratio is
 # unchanged, so no panel is stretched relative to the others.

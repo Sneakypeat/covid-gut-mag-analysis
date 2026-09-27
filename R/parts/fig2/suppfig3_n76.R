@@ -389,7 +389,7 @@ pF <- pF + theme(aspect.ratio = 1/3)
 supp3 <- ((pA + labs(tag = "a") + tag) | (pB + labs(tag = "b") + tag) | (pC + labs(tag = "c") + tag)) /
          ((pD + labs(tag = "d") + tag) | (pE + labs(tag = "e") + tag) | (pF + labs(tag = "f") + tag)) +
   plot_annotation(
-    title = "Supplementary Figure 3. Catalogue-imbalance and genome-quality robustness checks",
+    title = "Catalogue-imbalance and genome-quality robustness checks",
     theme = theme(plot.title = element_text(face = "bold", size = 13)))
 # canvas follows the panels: square plotting areas need the extra height
 ggsave(file.path(OUTDIR, "Supplementary_Figure_3_n76.pdf"), supp3, width = 12, height = 10.4,

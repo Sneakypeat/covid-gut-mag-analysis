@@ -92,7 +92,7 @@ mat_sub <- mat_completeness[meta_lfc$Taxon, ]
 mat_filtered <- mat_sub[, colSums(mat_sub > 0) >= 5]
 target_functions <- res_shift %>% filter(P_Val < 0.05) %>% arrange(desc(Diff))   # same rule as Fig. 3c
 
-driver_data_long <- mat_filtered[, colnames(mat_filtered) %in% target_functions$Function] %>%
+driver_data_long <- mat_sub[, colnames(mat_sub) %in% target_functions$Function] %>%   # all 35, as in Fig. 3c
   as.data.frame() %>% rownames_to_column("Taxon") %>%
   inner_join(df_driver_meta, by = "Taxon") %>%
   pivot_longer(cols = any_of(target_functions$Function), names_to = "Function",
@@ -388,7 +388,7 @@ small_text <- theme(
 
 page1 <- (wrap_elements(full = p_hm) + labs(tag = "a") + tag) +
   plot_annotation(
-    title = "Supplementary Figure 2. Functional and metabolic landscape of disease-associated and healthy commensal guilds",
+    title = "Functional and metabolic landscape of disease-associated and healthy commensal guilds",
     theme = theme(plot.title = element_text(face = "bold", size = 9)))
 
 page2 <- (((p_c3 + labs(tag = "b") + tag) | (p_high + labs(tag = "c") + tag) |
@@ -404,7 +404,7 @@ page2 <- page2 + plot_annotation(
 f1 <- file.path(tempdir(), "supp2_page1.pdf"); f2 <- file.path(tempdir(), "supp2_page2.pdf")
 ggsave(f1, page1, width = 8.27, height = 11.69, device = cairo_pdf, bg = "transparent")   # portrait
 ggsave(f2, page2, width = 11.69, height = 8.27, device = cairo_pdf, bg = "transparent")   # landscape
-out2 <- file.path(OUTDIR, "Supplementary_Figure_2_n76.pdf")
+out2 <- file.path(OUTDIR, "Supplementary_Figure_4_n76.pdf")
 if (nzchar(Sys.which("pdfunite"))) {
   system2("pdfunite", c(shQuote(f1), shQuote(f2), shQuote(out2)))
 } else {
@@ -413,4 +413,4 @@ if (nzchar(Sys.which("pdfunite"))) {
 }
 
 writeLines(STATS, file.path(OUTDIR, "SuppFig2_STATS_n76.txt"))
-message("DONE -> ", file.path(OUTDIR, "Supplementary_Figure_2_n76.pdf"))
+message("DONE -> ", file.path(OUTDIR, "Supplementary_Figure_4_n76.pdf"))
