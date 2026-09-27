@@ -439,7 +439,7 @@ b_main <- ggplot(df_plot, aes(x=Shannon, y=DistCent, color=Group)) +
   labs(title="Diversity vs dispersion",
        subtitle=sprintf("adj R² = %.3f; interaction p = %.3g",
                         summary(m)$adj.r.squared, m_anova["Shannon:Group","Pr(>F)"]),
-       x="Shannon Diversity (Alpha)", y="Distance to Centroid (Aitchison)") +
+       x="Shannon Diversity (Alpha)", y="Distance to spatial median (Aitchison)") +
   # square plotting area; the marginal tracks ride on top of it
   theme_mag + theme(legend.position="none", aspect.ratio = 1)
 

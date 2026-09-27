@@ -6,7 +6,7 @@
 # community and MAG-level results. Everything is recomputed after rarefying
 # every donor to the shallowest library:
 #   1. depth per cohort and per arm
-#   2. depth as a covariate on Shannon, richness and distance to centroid
+#   2. depth as a covariate on Shannon, richness and distance to the group spatial median
 #   3. the same endpoints on the rarefied table
 #   4. ANCOM-BC2 re-run on the rarefied table, against the primary result
 #

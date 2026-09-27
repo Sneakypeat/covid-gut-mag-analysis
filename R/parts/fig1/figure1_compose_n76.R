@@ -55,7 +55,7 @@ compose_figure1_n76 <- function() {
                                   barheight = unit(1.6, "mm"))) +
     theme(legend.box = "vertical", legend.position = "bottom")
   bm <- compact(b_main, NULL, NULL) +
-    labs(x = "Shannon diversity", y = "Distance to centroid") +
+    labs(x = "Shannon diversity", y = "Distance to spatial median") +
     theme(aspect.ratio = NULL, plot.margin = margin(0, 0, 0, 0))
   bt <- b_top + theme_void(base_size = 5, base_family = "Helvetica") +
     theme(legend.position = "none", plot.margin = margin(0, 0, 0, 0))
