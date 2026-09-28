@@ -107,9 +107,9 @@ embed <- function(nn, md, epochs = 500, seed = 42) {
   umap(D, config = cfg)$layout
 }
 
-# ---- 3. default recipe, then sweep -------------------------------------------
+# ---- 3. nn15 md0.10 minPts 5, then sweep -------------------------------------
 
-message("default recipe ...")
+message("nn15 md0.10 minPts 5 ...")
 lay_pub <- embed(15, 0.1)
 cl_pub  <- hdbscan(lay_pub, minPts = 5)$cluster
 pub     <- score_clusters(cl_pub) %>% mutate(n_neighbors = 15, min_dist = 0.1, minPts = 5)
@@ -174,7 +174,7 @@ plot_candidate <- function(nn, md, mp, title = NULL) {
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 top6 <- head(ranked, 6)
-p_top <- wrap_plots(c(list(plot_candidate(15, 0.1, 5, "Default recipe on 584 MAGs")),
+p_top <- wrap_plots(c(list(plot_candidate(15, 0.1, 5, "nn15 md0.10 minPts 5 on 584 MAGs")),
                       lapply(seq_len(nrow(top6)), function(i)
                         plot_candidate(top6$n_neighbors[i], top6$min_dist[i], top6$minPts[i]))),
                     ncol = 4)
