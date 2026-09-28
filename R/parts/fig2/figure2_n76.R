@@ -1,15 +1,13 @@
 # =============================================================================
-# Figure 2, rebuilt on the 584-MAG catalogue (578 bacterial tips)
+# Figure 2, 584-MAG catalogue (578 bacterial tips)
 #
 #   a  circular ML tree (GTDB-Tk de novo, LG + gamma, rooted on Bacteroidota)
 #   b  MIMAG quality scatter with per-phylum marginal densities
 #   c  phylogenetic correlogram of LFC, inset: patristic distance per GTDB rank
 #   d  local Moran's I scatter (individual vs neighbour-lagged LFC)
 #
-# Panel code is transcribed from ~/MAG_Analysis/MAG_tree.R. Statistics come
-# from figure2_n76_stats.R (fig2/figure2_stats_n76.rds); run that first.
-# Tree tips equal catalog_id exactly, so the original's fuzzy name mapper is
-# not needed.
+# Statistics come from figure2_n76_stats.R (fig2/figure2_stats_n76.rds); run
+# that first. Tree tips equal catalog_id exactly.
 #
 # Outputs -> result2/n76/fig2/
 # =============================================================================
@@ -240,16 +238,15 @@ build_tree_plot <- function(label_col, show_labels = TRUE, ring_gap = NULL, sym 
 
 p_tree <- build_tree_plot("Label_Text", show_labels = SHOW_STANDALONE_TREE_LABELS)
 
-# As published: no legends on the tree itself (they were set beside it by hand)
+# No legends on the tree itself; they are placed beside it in the layout.
 p_tree_clean <- p_tree + theme(legend.position = "none",
                                panel.background = element_rect(fill = "transparent", color = NA),
                                plot.background  = element_rect(fill = "transparent", color = NA))
-# The published tree put 401 tips on a 400 mm canvas. Scaling the canvas with tip
-# count keeps each tip's angular slot at the published size, which is what lets
-# runs of adjacent labelled tips (e.g. the enriched Enterobacteriaceae) stay
-# legible at label size 1.8. Scale it down when placing it, as before.
+# The canvas scales with tip count (400 mm per 401 tips), which keeps runs of
+# adjacent labelled tips (e.g. the enriched Enterobacteriaceae) legible at
+# label size 1.8. Scale it down when placing it.
 TREE_MM <- round(400 * nrow(meta_final) / 401)
-say(sprintf("tree canvas %d mm (published: 400 mm for 401 tips)", TREE_MM))
+say(sprintf("tree canvas %d mm (400 mm per 401 tips)", TREE_MM))
 ggsave(file.path(OUTDIR, "Fig2a_Tree_n76_large.pdf"), p_tree_clean,
        width = TREE_MM, height = TREE_MM, units = "mm", device = cairo_pdf, limitsize = FALSE)
 
@@ -350,12 +347,12 @@ write_csv(pg_s, file.path(OUTDIR, "Fig2b_strain_per_genome_n76.csv"))
 
 cr <- st$corr_res
 lim <- st$exact_limit
-say(sprintf("correlogram: zero-crossing %.3f (lower-bound crossing, published method, %.3f); significant classes +%d / -%d of %d",
+say(sprintf("correlogram: zero-crossing %.3f (lower-bound crossing, %.3f); significant classes +%d / -%d of %d",
             lim, st$lower_bound_limit, sum(cr$sig == "positive"), sum(cr$sig == "negative"), nrow(cr)))
 
 # The canonical standalone panel uses the original discrete red/blue
 # significance dots.  Keep the native phylosignal rendering separately under
-# the historical *_base_n76.pdf filename so the two outputs are not duplicates.
+# the *_base_n76.pdf filename so the two outputs are not duplicates.
 p_corr <- ggplot(cr, aes(d.mean, correlation)) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   geom_line(aes(y = lower, linetype = "95% confidence interval"), colour = "black", linewidth = 0.4) +

@@ -2,7 +2,7 @@
 # Figure 4f (combined): predicted capacity against predicted use.
 #
 # Three numbers exist for each fermentation product and they are not the same
-# number. The published 4f showed only the first.
+# number.
 #
 #   Capacity   per genome, the maximum formation flux of the cytosolic product
 #              on the colonic medium with biomass held at 10% of optimum, then

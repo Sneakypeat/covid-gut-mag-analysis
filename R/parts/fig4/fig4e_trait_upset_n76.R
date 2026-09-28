@@ -1,13 +1,10 @@
 #!/usr/bin/env Rscript
 # Figure 4e: gut functional trait UpSet, carrying ANCOM-BC2 status and abundance.
 #
-# The first UpSet counted genomes equally, so plant CAZyme hits (527 of 584 MAGs)
-# dominated the display while carrying no case-control signal, and the butyrate
-# terminal pair (17 genomes) was invisible despite a 21-fold abundance collapse.
-# The boxplot that replaced it fixed the weighting but lost the co-occurrence
-# structure: which traits travel together in the same genome.
-#
-# This keeps the UpSet and adds the two missing dimensions to it.
+# Plant CAZyme hits occur in 527 of 584 MAGs, so genome counts alone would let
+# them dominate while the butyrate terminal pair (17 genomes) stays invisible
+# despite a 21-fold abundance collapse. The UpSet keeps trait co-occurrence
+# (which traits travel together in the same genome) and adds two dimensions:
 #   top    per-donor share of the community carried by each trait combination,
 #          cases against controls, which is the abundance weighting
 #   middle genome counts split by ANCOM-BC2 direction, which is the differential

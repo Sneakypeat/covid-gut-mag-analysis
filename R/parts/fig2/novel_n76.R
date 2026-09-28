@@ -1,16 +1,13 @@
 # =============================================================================
 # Novel taxa in the 76-donor catalogue
 #
-# Changed-claim 6 says the published novel-species paragraph must be rewritten
-# rather than renumbered. This builds the evidence for that rewrite:
+# Evidence for the candidate novel-species paragraph:
 #
 #   1. how many MAGs are novel, and at what rank
 #   2. whether they are good enough genomes to name (MIMAG)
 #   3. where they sit taxonomically and which arm discovered them
 #   4. whether they are differentially abundant, and in which direction
-#   5. whether they are phylogenetically clustered -- the published text claimed
-#      a monophyletic, consistently depleted Lachnospiraceae subclade, and that
-#      claim needs testing rather than restating
+#   5. whether they are phylogenetically clustered
 #   6. whether they are rare or genuinely prevalent
 #
 # Outputs -> result2/n76/novel/
@@ -109,9 +106,9 @@ say(sprintf("   novel MAGs meeting >90%% complete and <5%% contaminated: %d of %
 say(sprintf("   median completeness %.1f%% (range %.1f-%.1f), median contamination %.2f%%",
             median(nov$completeness), min(nov$completeness), max(nov$completeness),
             median(nov$contamination)))
-# the CheckM2 assembly columns were only re-run for the 386 rebuilt-control
-# genomes; the 198 carried-over case MAGs have completeness and contamination
-# but no contig statistics
+# the CheckM2 assembly columns exist for the 386 control-derived genomes; the
+# 198 case-derived MAGs have completeness and contamination but no contig
+# statistics
 n_stat <- sum(!is.na(nov$n50))
 say(sprintf("   contig statistics available for %d of %d novel MAGs (the carried-over case genomes have none):",
             n_stat, nrow(nov)))
@@ -185,8 +182,7 @@ zp <- function(obs, nullv, lab) {
 zp(mpd_of(tips),  null["mpd", ],  "mean pairwise")
 zp(mntd_of(tips), null["mntd", ], "nearest-taxon")
 
-say("   the published text claimed a monophyletic novel Lachnospiraceae subclade;")
-say(sprintf("   in the rebuilt catalogue %d novel MAGs are Lachnospiraceae",
+say(sprintf("   %d novel MAGs are Lachnospiraceae",
             sum(nov$family == "Lachnospiraceae", na.rm = TRUE)))
 
 # ---- 6. prevalence ----------------------------------------------------------
@@ -237,7 +233,7 @@ pA <- d %>% count(rank_novel) %>%
   geom_text(aes(label = n), vjust = -0.3, size = 3) +
   scale_fill_manual(values = c("grey75", "#7BA7C7", "#3B6FB6", "#20419A")) +
   scale_y_sqrt(expand = expansion(mult = c(0, 0.15))) +
-  labs(title = "Novelty in the rebuilt catalogue",
+  labs(title = "Novelty in the 584-MAG catalogue",
        subtitle = "GTDB-Tk assignment; square-root axis", x = NULL, y = "MAGs") +
   theme_bw(base_size = 9) +
   theme(plot.title = element_text(face = "bold", size = 9),

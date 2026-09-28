@@ -1,20 +1,14 @@
 # =============================================================================
-# Figure 1, rebuilt on the 76-donor catalogue (584 MAGs, 38 case / 38 control)
+# Figure 1, 76-donor catalogue (584 MAGs, 38 case / 38 control)
 #
-# Supersedes both the published n = 33 figure and the donor-collapsed n = 16
-# figure. The control arm is now 38 independent donors with technical runs
-# merged before assembly, so there is no pseudoreplication and no collapse step.
+# The control arm is 38 independent donors with technical runs merged before
+# assembly, one sample per donor.
 #
-# Panels and encodings follow the manuscript Figure 1 legend exactly. All
-# plotting helpers (add_stats, get_tax_df, build_mag_df, plot_ancombc2_volcano,
-# tidy_ancombc2_res) are adapted from ~/MAG_Analysis/Mags_taxanomy.R. The cached
+# Panels and encodings follow the manuscript Figure 1 legend. The cached
 # primary ANCOM-BC2 calls are used directly; no model is refitted here.
 #
-# Panel c (ZOE health index) is CONDITIONAL: it is drawn only when the rebuilt
-# per-donor ZOE table exists. The 22 PREDICT controls and the new H5 donor had
-# no published ZOE score, and the 15 legacy donors were re-QC'd with their runs
-# merged, so the whole control arm is being re-profiled with MetaPhlAn. Until
-# that lands the figure is built as a 7-panel a-g.
+# Panel c (ZOE health index) is drawn only when the per-donor ZOE table written
+# by zoe_n76.R exists.
 #
 # Outputs -> result2/n76/
 # =============================================================================
@@ -57,8 +51,8 @@ STATS <- c()
 say <- function(...) { line <- paste0(...); message(line); STATS <<- c(STATS, line) }
 
 # Prevalence = share of donors in which a MAG exceeds PREV_DETECTION relative
-# abundance. The published rule (>= 1 read) saturates at this depth: control
-# donors now carry a median 52 M mapped reads, so one stray read at 95% identity
+# abundance. A >= 1 read rule saturates at this depth: control
+# donors carry a median 52 M mapped reads, so one stray read at 95% identity
 # made E. coli, E. ruysiae, K. quasipneumoniae and C. portucalensis "present" in
 # every control. A 0.01% floor makes presence comparable across 21-57 M reads.
 # Sensitivity (prevalence-LFC Spearman, significant MAGs): >=1 read 0.31;
@@ -77,7 +71,7 @@ ARROW_FONT <- "DejaVu Sans"
 ps_mags <- readRDS(file.path(outdir, "ps_mags_n76.rds"))
 res76   <- read.csv(file.path(outdir, "ANCOMBC2_MAG_results_n76.csv"), stringsAsFactors = FALSE)
 
-# Rebuilt per-donor ZOE table; absent until MetaPhlAn on the 38 controls finishes.
+# Per-donor ZOE table written by zoe_n76.R.
 ZOE_NEW <- file.path(outdir, "ZOE_HealthIndex_PerDonor_n76.csv")
 HAVE_ZOE <- file.exists(ZOE_NEW)
 
@@ -251,12 +245,8 @@ labs_ait <- c(sprintf("PCoA 1 (%.1f%%)", 100*var_ait[1]), sprintf("PCoA 2 (%.1f%
 df_ait <- plot_ordination(ps_clr, ord_ait, justDF = TRUE)
 df_ait$Group <- get_variable(ps_clr, "Group")
 
-# Arrows come from phylum relative abundance, computed from the counts. The
-# earlier version divided the CLR table by its own row sums; CLR values sum to
-# zero by construction (measured: 1e-12), so every sample was divided by its own
-# rounding error. That corrupted both which phyla were picked (Bacillota and
-# Bacteroidota, three quarters of every sample, could never appear) and the
-# correlations that set the arrow directions. arrow_scale below is unchanged.
+# Arrows come from phylum relative abundance computed from the counts, not from
+# the CLR table, whose rows sum to zero by construction.
 ps_rel_ait  <- transform_sample_counts(ps_mags, function(x) x/sum(x))
 ps_glom_ait <- tax_glom(ps_rel_ait, taxrank = "Phylum")
 top5 <- names(sort(taxa_sums(ps_glom_ait), decreasing = TRUE)[1:5])
@@ -479,11 +469,8 @@ save_panel(pB, "DiversityInstability_marginal", 6.5, 6.3)
 # =============================================================================
 # PANEL C: ZOE microbiome health index  (CONDITIONAL)
 #
-# Drawn only once ZOE_HealthIndex_PerDonor_n76.csv exists. The published ZOE
-# table covers 38 cases and the 33 legacy control RUNS; it has no score for the
-# 22 PREDICT controls or the new H5 donor, and its legacy control scores were
-# computed on per-run reads that no longer correspond to the donor-level reads
-# used here. Rather than mix the two, the whole control arm is re-profiled.
+# Drawn only once ZOE_HealthIndex_PerDonor_n76.csv exists. Every donor is
+# profiled at donor level, so cases and controls are scored on the same basis.
 # =============================================================================
 if (HAVE_ZOE) {
   cliffs_delta <- function(a, b) mean(outer(a, b, function(x, y) sign(x - y)))
@@ -563,12 +550,9 @@ save_panel(pD, "Pie", 5, 5)
 # =============================================================================
 # PANEL E (lettered f): prevalence vs effect size, significant MAGs
 #
-# Transcribed from Mags_taxanomy.R:2935-3082 ("Figure1F_Prevalence_Effect").
-# Axes follow the ORIGINAL: x = log fold change, y = prevalence difference,
-# with the red "core" and orange "opportunistic" zones drawn on the y axis.
-# An earlier adaptation had these axes swapped, which stacked every MAG with a
-# prevalence difference of exactly zero into one vertical column at x = 0.
-# Prevalence uses PREV_DETECTION (see top of file), not the original > 0.
+# x = log fold change, y = prevalence difference, with the red "core" and
+# orange "opportunistic" zones drawn on the y axis. Prevalence uses
+# PREV_DETECTION (see top of file).
 # =============================================================================
 ps_rel_e  <- transform_sample_counts(ps_mags, function(x) x / sum(x))
 otu_rel_e <- as.matrix(otu_table(ps_rel_e))

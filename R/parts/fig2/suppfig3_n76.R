@@ -1,17 +1,17 @@
 # =============================================================================
-# Supplementary Figure 3, rebuilt-catalogue robustness checks
+# Supplementary Figure 3, catalogue robustness checks
 #
-# Two questions a reviewer will ask, answered directly.
+# Two robustness checks.
 #
 # 1. CATALOGUE IMBALANCE. The catalogue holds 198 case-derived and 386
-#    control-derived genomes, and the depleted:enriched ratio has tracked that
-#    imbalance across analyses (1.20 published, 1.45 donor-collapsed, 2.33 here).
+#    control-derived genomes, and the depleted:enriched ratio (2.33) may partly
+#    track that imbalance.
 #    A genome can only be discovered in the arm whose assemblies produced it, so
 #    part of the depletion may be catalogue construction rather than biology.
 #    Test: re-run ANCOM-BC2 restricted to MAGs detected in BOTH arms, where
 #    discovery provenance cannot decide presence, and see what survives.
 #
-# 2. CONTAMINATION. The phylogenetic logistic regression now finds contamination
+# 2. CONTAMINATION. The phylogenetic logistic regression finds contamination
 #    predicting case-enrichment (beta = +0.088, p = 0.008), which reads as
 #    assembly artefact. Test whether it is carried by the blooming
 #    Enterobacteriaceae (strain mixtures inflate CheckM2 contamination) by

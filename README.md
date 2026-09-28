@@ -19,11 +19,9 @@ analyses. Run commands from the repository root.
     Rscript R/figure4.R     # Fig 4 + Supplementary Figures 6 and 7
 
 `R/config.R` defines the shared paths. `COVID_MAG_BASE` points at the unpacked
-deposit and `COVID_MAG_OUT` optionally redirects outputs. Release validation
-currently covers syntax and removal of private machine/account identifiers, not
-end-to-end execution: some historical parts still override this configuration
-or expect legacy layouts and helpers. Those remaining portability issues must
-be resolved before these commands can be treated as a reproducible release.
+deposit and `COVID_MAG_OUT` optionally redirects outputs. The scripts
+are checked for syntax; they have not been run end to end on a fresh machine,
+and some expect the directory layout used during the analysis.
 
 The ZOE health-rank step additionally needs the external reference workbook
 `41586_2025_9854_MOESM3_ESM.xlsx`. Place it under `references/` within

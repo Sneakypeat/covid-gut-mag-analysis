@@ -1,14 +1,10 @@
 # =============================================================================
-# Supplementary Figure 1, rebuilt on the 76-donor catalogue
+# Supplementary Figure 1, 76-donor catalogue
 #
 #   a  QC: MAG read count vs genome coverage fraction, ghost / rare / dominant
 #   b  per-donor phylum composition, log-compressed, faceted by group
 #
-# Both panels transcribed from ~/MAG_Analysis/Mags_taxanomy.R:
-#   (a) lines 3330-3420, "QC_Depth_vs_Breadth_Annotated.pdf"
-#   (b) lines 7700-7775, "Figure1_Taxonomy_Bar_LogCompressed.pdf"
-# Thresholds (10% / 75% coverage) and the log-compression constant (k = 100)
-# are the published ones.
+# Coverage thresholds 10% / 75%; log-compression constant k = 100.
 #
 # Outputs -> result2/n76/supp_fig/
 # =============================================================================
@@ -78,7 +74,7 @@ n_total <- nrow(check_df)
 n_ghosts <- sum(check_df$Coverage < 0.10); pct_ghosts <- round(100 * n_ghosts / n_total, 1)
 n_dominant <- sum(check_df$Coverage > 0.75); pct_dom <- round(100 * n_dominant / n_total, 1)
 say(sprintf("PANEL a: %s MAG-by-donor observations with >0 reads", format(n_total, big.mark = ",")))
-say(sprintf("   Spearman(coverage, log10 count) R = %.2f, p = %.3g  [the published legend calls this Pearson; the code computes Spearman]", r_val, cor_res$p.value))
+say(sprintf("   Spearman(coverage, log10 count) R = %.2f, p = %.3g", r_val, cor_res$p.value))
 say(sprintf("   ghost hits (<10%% coverage): %s (%.1f%%) | high confidence (>75%%): %s (%.1f%%)",
             format(n_ghosts, big.mark = ","), pct_ghosts, format(n_dominant, big.mark = ","), pct_dom))
 
@@ -116,7 +112,7 @@ df_bar <- psmelt(ps_rel) %>%
   mutate(Phylum = as.character(Phylum),
          Phylum = ifelse(Phylum %in% names(phylum_colors), Phylum, "Other"))
 
-k <- 100   # published compression constant
+k <- 100   # log-compression constant
 df_bar_comp <- df_bar %>%
   group_by(Sample) %>%
   mutate(Abund_comp = log1p(k * Abundance),
@@ -153,11 +149,8 @@ p_bar <- ggplot(df_bar_comp, aes(x = Sample, y = Abund_comp, fill = Phylum)) +
         legend.position = "right")
 
 # ---- c. MAG quality against MIMAG thresholds --------------------------------
-# Moved here from Figure 2b: it is a quality-control display, and the Figure 2
-# slot went to the strain-diversity result. The old grouped marginal densities
-# were independently normalised within each phylum, which made one-MAG phyla
-# look as prominent as Bacillota. Use catalogue-wide marginals instead; phylum
-# remains encoded by the scatter-point colours.
+# Catalogue-wide marginal densities, so one-MAG phyla are not drawn as
+# prominently as Bacillota; phylum is encoded by the scatter-point colours.
 
 phy_colors <- readRDS(file.path(BASE, "results/phylum_colors_mags.rds"))
 qc_all <- rd("MAG_quality_taxonomy.tsv") %>%
@@ -213,7 +206,7 @@ ggsave(file.path(OUTDIR, "SuppFig1c_MAG_Quality_n76.pdf"), p_qc_marg, width = 6,
        device = cairo_pdf, bg = "transparent")
 
 # ---- d. ZOE reference concordance -------------------------------------------
-# Rebuilt from the per-SGB table written by zoe_n76.R, so this panel does not
+# Drawn from the per-SGB table written by zoe_n76.R, so this panel does not
 # depend on the ZOE supplementary spreadsheet being present. It gives the
 # species-level concordance behind the per-donor health index of Figure 1c.
 HEALTH_PAL <- c("#1B7837", "#A6DBA0", "#F7F7F7", "#C2A5CF", "#762A83")

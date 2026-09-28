@@ -1,5 +1,5 @@
 # =============================================================================
-# Supplementary Figure 2, rebuilt on the 76-donor catalogue
+# Supplementary Figure 2, 76-donor catalogue
 #
 #   a      heatmap of species-level functional drivers, sub-clustered by status
 #   b-d    t-SNE overlays of cytochrome completeness (Complex III, high-, low-affinity)
@@ -7,13 +7,6 @@
 #   f,g,i  binary t-SNE overlays (nitrate/TMAO, sulfur oxyanion redox, butyrate)
 #   h      phylum overlay
 #   j      raincloud of LFC for module-carrying MAGs, Wilcoxon against zero
-#
-# Transcribed from ~/MAG_Analysis/Mags_annotation_Fig3.R:
-#   a    lines 2087-2300 (active-species filter, ward.D2 sub-clustering, magma)
-#   b-d  lines 655-730   (cyto_defs, create_cyto_subplot)
-#   e    line  584       (p4_ancom, gradient2 capped at +/-2)
-#   f,g,i lines 735-850  (axis_defs, plot_functional_axis)
-#   j    lines 2539-2960 (guild_defs, one-sample Wilcoxon vs zero, BH, ggdist)
 #
 # The t-SNE embedding is the one Figure 3 drew (fig3/df_tsne_plot_n76.rds), so
 # every panel sits on identical coordinates rather than a re-run of Rtsne.

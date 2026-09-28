@@ -1,5 +1,5 @@
 # =============================================================================
-# Audit item 3: the phylum and family BLUPs are random-effect deviations fitted
+# The phylum and family BLUPs are random-effect deviations fitted
 # on the 290 significant MAGs, so they describe how a clade's MAGs deviate from
 # the average significant MAG, not whether the clade itself changed in the gut.
 #

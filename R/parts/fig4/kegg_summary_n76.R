@@ -10,9 +10,6 @@
 #      module hierarchy (br:ko00002).
 #   Both drawn as single-column heatmaps in the style of Figure 3c.
 #
-#   The raw-p < 0.05 butterfly (80 pathways) that sat in Supplementary Fig 6
-#   was dropped: Figure 4c already shows every pathway at BH q < 0.05.
-#
 # Test, reproduced exactly from KEGG_KO_hypergeometric_ORA_n76.csv (checked on
 # "Metabolic pathways", both directions): universe N = tested KOs carrying at
 # least one annotation of the kind being tested; K = KOs higher in that group
@@ -141,9 +138,7 @@ for (i in seq_len(nrow(cls_sig))) with(arrange(cls_sig, desc(signed))[i, ],
   say(sprintf("   %-48s %-7s q = %.2g  (%s pathways)", level2, dir, q, lab)))
 
 # Single tile column sorted by signed -log10(FDR), exactly the Fig 3c layout.
-# An earlier version faceted by KEGG level; the long strip labels consumed the
-# whole panel width and the tiles did not render. The category of every row is
-# kept in the CSV rather than drawn.
+# The category of every row is kept in the CSV rather than drawn as facets.
 one_d <- function(df, row_col, title, subtitle, cap = NULL) {
   lim <- if (is.null(cap)) max(abs(df$signed)) else cap
   df %>% mutate(row = fct_reorder(.data[[row_col]], signed)) %>%
@@ -171,9 +166,9 @@ pC <- one_d(cls_sig, "level2",
 
 # ---- d. module ORA -----------------------------------------------------------
 
-# Cut at the last space before the limit. Cutting names at their first comma, as
-# an earlier version did, made M00651 and M00652 both read "Vancomycin
-# resistance" (they are the D-Ala-D-Lac and D-Ala-D-Ser types).
+# Cut at the last space before the limit, not at the first comma, which would
+# make M00651 and M00652 (D-Ala-D-Lac and D-Ala-D-Ser types) both read
+# "Vancomycin resistance".
 shorten <- function(x, n) ifelse(nchar(x) <= n, x,
   paste0(sub("\\s+\\S*$", "", substr(x, 1, n)), "\u2026"))
 

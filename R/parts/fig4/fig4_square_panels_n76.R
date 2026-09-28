@@ -11,8 +11,7 @@
 #
 # Every tile in b, c and d is the same physical square (TILE inches), fixed
 # with ggh4x::force_panelsizes, so they line up when placed side by side in
-# Affinity. The earlier versions let the tile stretch to the panel width, which
-# drew wide slabs instead of boxes.
+# Affinity.
 #
 # Reads the tables written by camper_n76.R and kegg_summary_n76.R.
 # =============================================================================
@@ -110,10 +109,8 @@ pMod <- square_1d(km, "short", "signed",
                   legend_name = "Signed\n-log10(FDR)", lim = CAP_FDR, legend = FALSE)
 
 # ---- c. KEGG pathway ORA, every pathway at BH q < 0.05 -----------------------
-# The full pathway-level result, as in the published paper, rather than the
-# category summary it briefly replaced (too coarse to read). Each pathway takes
-# its stronger direction; the sign carries it, as on the published butterfly.
-# The raw-p < 0.05 list (80 pathways) remains in Supplementary Fig. 6.
+# The full pathway-level result. Each pathway takes its stronger direction;
+# the sign carries it.
 kp <- read_csv(file.path(F4, "kegg_fast/linda_results/KEGG_KO_hypergeometric_ORA_n76.csv"),
                show_col_types = FALSE) %>%
   mutate(dir = ifelse(q_case <= q_control, "Case", "Control"),
@@ -241,12 +238,9 @@ left  <- top / (wrap_elements(full = pCam) + labs(tag = "b") + tag) +
   plot_layout(heights = c(H_TOP, H_CAM))
 right <- sq(pPath, "c") / plot_spacer() +
   plot_layout(heights = c(h_of(pPath), max(H_L - h_of(pPath), 0.01)))
-# Panel e is the trait UpSet from fig4e_trait_upset_n76.R. The first UpSet
-# counted genomes equally and so gave its largest bar to the one trait carrying
-# no signal; the boxplot that replaced it fixed the weighting but dropped the
-# co-occurrence structure. This one keeps the intersections and adds both
-# missing dimensions, per-donor abundance share and ANCOM-BC2 direction.
-# The marginal per-trait version is still built by fig4e_trait_capacity_n76.R
+# Panel e is the trait UpSet from fig4e_trait_upset_n76.R: trait intersections
+# with per-donor abundance share and ANCOM-BC2 direction.
+# The marginal per-trait version is built by fig4e_trait_capacity_n76.R
 # and kept in this directory for the supplement.
 # Given the left two-thirds of a bottom row, near its native 7.2 in width,
 # rather than stretched across the full page.

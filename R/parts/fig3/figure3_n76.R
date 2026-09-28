@@ -1,22 +1,16 @@
 # =============================================================================
-# Figure 3, rebuilt on the 584-MAG catalogue
+# Figure 3, 584-MAG catalogue
 #
-# Arrangement follows the published FIGURE_3.pdf, which was composited in
-# Affinity from four separately saved plots:
+# Composited in Affinity from four separately saved plots:
 #   A  t-SNE of MAG functional profiles, coloured by functional guild
 #   B  evolutionary determinism: patristic vs functional distance, Mantel test
 #   C  significant functional drivers (Wilcoxon per DRAM feature)
 #   D  taxonomic specialisation and metabolic niche map, with the pie row
-# (The published legend letters a-d list these in a different order: t-SNE,
-# niche map, drivers, hexbin. The figure's own A-D order is used here.)
 #
-# Guild definition keeps the published recipe: Jaccard on the binarised DRAM
-# product -> UMAP(n_neighbors 15, min_dist 0.1, 500 epochs, seed 42) ->
-# HDBSCAN(minPts 5). On 584 MAGs that yields 38 guilds rather than the
-# published 29; figure3_n76_cluster_decision.R shows the extra guilds are not
-# redundant (0.1% of guild pairs exceed 0.95 profile similarity) and that the
-# count itself is seed-sensitive (35-45), so it is reported as the seed-42
-# solution. The t-SNE is a separate embedding and never defines the guilds.
+# Guilds: Jaccard on the binarised DRAM product -> UMAP -> HDBSCAN, with the
+# parameters chosen in figure3_n76_tuning.R and figure3_n76_cluster_decision.R
+# (see UMAP_NN etc. below). The t-SNE is a separate embedding and never
+# defines the guilds.
 #
 # Outputs -> result2/n76/fig3/
 # =============================================================================
@@ -60,9 +54,8 @@ say <- function(...) { l <- paste0(...); message(l); STATS <<- c(STATS, l) }
 # Chosen from the sweep in figure3_n76_tuning.R: 30 guilds, 20.9% noise,
 # silhouette 0.233, unique identity 50%, stability ARI 0.791.
 UMAP_NN <- 15; UMAP_MD <- 0.05; UMAP_EPOCHS <- 500; HDB_MINPTS <- 6; SEED <- 42
-# "ancom": MAG status from ANCOM-BC2 q < 0.05. The published script instead
-# called a MAG significant when |LFC| >= 1, which is not a test; it drives the
-# panel D pies and the guild ordering, so the switch is left visible.
+# "ancom": MAG status from ANCOM-BC2 q < 0.05; it drives the panel D pies and
+# the guild ordering.
 STATUS_RULE <- "ancom"
 
 theme_transparent <- theme(
@@ -92,7 +85,7 @@ res <- read.csv(file.path(N76, "ANCOMBC2_MAG_results_n76.csv"), stringsAsFactors
 tax <- read.delim(file.path(INDIR, "MAG_quality_taxonomy.tsv"), check.names = FALSE,
                   quote = "", comment.char = "")
 
-# ---- 2. guilds: UMAP + HDBSCAN on Jaccard (published recipe) ----------------
+# ---- 2. guilds: UMAP + HDBSCAN on Jaccard ------------------------------------
 
 set.seed(SEED)
 dist_jaccard <- proxy::dist(mat_func, method = "Jaccard")
@@ -364,7 +357,7 @@ p_balloon <- ggplot(plot_data_balloon, aes(Label_Text, Phylum_Plot)) +
        x = "Functional Cluster Legend", y = "Phylum") +
   scale_y_discrete(labels = md_taxon) +
   theme_bw(base_size = 9) +
-  # The cluster names move onto the pie strips below, as in the published panel.
+  # The cluster names move onto the pie strips below.
   # Leaving them on this axis pushed the pies far down and squashed the bubbles.
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         axis.title.x = element_blank(),

@@ -1,23 +1,13 @@
 # =============================================================================
-# Supplementary Figure 4, reviewer-response robustness checks rebuilt on n = 76
+# Supplementary Figure 4, robustness checks on n = 76
 #
-# The published response ran eight sections. Five no longer apply:
-#   - CAFCA permutation correction (section 4) and the GO cellular-component
-#     audit (section 8) are withdrawn with the GO/CAFCA layers.
-#   - Technical-replicate handling and the pseudoreplication donor-collapse
-#     check (section 5) are moot: the rebuild is 76 donors, one sample each.
-#   - ZOE health-rank validation (section 6) already ships as
-#     fig1/SuppFig_ZOE_Concordance_n76.pdf.
-#   - The sample-level metadata table (section 7) is a table, not a figure.
-#
-# Three live ones are rebuilt here:
-#   a-b  Reviewer 1 item 2. Does the phylogenetic signal survive completeness
+#   a-b  Does the phylogenetic signal survive completeness
 #        adjustment? Raw LFC, completeness-residualised LFC, and a >=90%
 #        completeness subset.
-#   c-d  Reviewer 1 item 5. Is functional load a completeness artefact? Variance
+#   c-d  Is functional load a completeness artefact? Variance
 #        explained by guild against completeness and genome size, and guild
 #        differences before and after residualisation.
-#   e-f  Reviewer 1 item 4. Is the guild solution an artefact of the clustering
+#   e-f  Is the guild solution an artefact of the clustering
 #        parameters? Stability across seeds and across the parameter sweep.
 #
 # Outputs -> result2/n76/supp_fig/
@@ -58,7 +48,7 @@ meta <- st$meta_df
 # a-b. phylogenetic signal against genome completeness
 # =============================================================================
 
-say("## Reviewer 1 item 2: is the phylogenetic signal a completeness artefact?")
+say("## a-b: is the phylogenetic signal a completeness artefact?")
 d <- meta %>% filter(!is.na(lfc_GroupCase), !is.na(Completeness))
 d <- d[d$Genome_ID %in% tree$tip.label, ]
 say(sprintf("   tree tips with an LFC and a completeness value: %d", nrow(d)))
@@ -134,7 +124,7 @@ pB <- ggplot(d, aes(Completeness, lfc_GroupCase)) +
 # c-d. functional load against completeness and genome size
 # =============================================================================
 
-say(""); say("## Reviewer 1 item 5: is functional load a completeness artefact?")
+say(""); say("## c-d: is functional load a completeness artefact?")
 prod <- read_tsv(file.path(INDIR, "DRAM_metabolism_product.tsv"), show_col_types = FALSE)
 # read_tsv keeps the 66 True/False columns logical, so as.matrix coerces them to
 # 1/0 and the load sums all 98 pathway columns. read.delim would make the whole
@@ -155,8 +145,8 @@ fd <- fl %>% inner_join(guilds, by = "Genome_ID") %>% left_join(qual, by = "Geno
 say(sprintf("   MAGs with a load, a guild and a completeness value: %d across %d guilds",
             nrow(fd), n_distinct(fd$Guild)))
 
-# Genome size comes from the CheckM2 columns, which were only re-run for the
-# rebuilt controls; the carried-over case genomes have none. Size models are
+# Genome size comes from the CheckM2 columns, which exist for the
+# control-derived genomes only. Size models are
 # therefore fitted on the subset that has it, and the residualisation that
 # panel d uses is on completeness alone so no MAG is dropped.
 fd_sz <- fd %>% filter(!is.na(Genome_Mb))
@@ -215,7 +205,7 @@ pD <- fd %>%
 # e-f. is the guild solution an artefact of the clustering parameters?
 # =============================================================================
 
-say(""); say("## Reviewer 1 item 4: is the guild solution parameter-dependent?")
+say(""); say("## e-f: is the guild solution parameter-dependent?")
 cd <- read_csv(file.path(N76, "fig3", "fig3_cluster_decision_n76.csv"), show_col_types = FALSE) %>%
   filter(!is.na(n_guilds)) %>%
   mutate(chosen = grepl("md0.05", label) & mp == 6 & nn == 15)
@@ -264,12 +254,11 @@ pF <- ggplot(seeds_long, aes(reorder(label, g, median), g)) +
 
 # =============================================================================
 # g. UMAP + HDBSCAN against tree-based clustering
-# The published response compared the guilds to Bonsai, pvclust and HiDeF.
 # Bonsai and HiDeF need external Python/HPC runs; pvclust is the tree-based
 # comparator that runs here, on the same Jaccard distance the guilds came from.
 # =============================================================================
 
-say(""); say("## Reviewer 1 item 4: UMAP + HDBSCAN against hierarchical clustering")
+say(""); say("## g: UMAP + HDBSCAN against hierarchical clustering")
 mat <- readRDS(file.path(N76, "fig3", "df_func_n76_30clusters.rds"))
 prod_bin <- load_mat[rownames(load_mat) %in% mat$Taxon, , drop = FALSE]
 prod_bin[prod_bin > 0] <- 1
@@ -314,13 +303,11 @@ pG <- ggplot(purity, aes(reorder(Guild, purity), purity)) +
         axis.text.y = element_text(size = 6))
 
 # =============================================================================
-# h-i. sample-level sequencing audit (published Fig_Sample_Metadata_Audit)
-# Panel C of the published version counted sequencing runs per donor. The
-# rebuild is 76 donors with one sample each, so that panel has nothing to show
-# and is dropped rather than rebuilt as a row of ones.
+# h-i. sample-level sequencing audit
+# 76 donors with one sample each, so there is no runs-per-donor panel.
 # =============================================================================
 
-say(""); say("## Reviewer 1 item 1: sample-level sequencing audit")
+say(""); say("## h-i: sample-level sequencing audit")
 cl <- read_tsv(file.path(INDIR, "coverm_long.tsv"), show_col_types = FALSE)
 smeta <- read.delim(file.path(INDIR, "sample_metadata_76.tsv"), check.names = FALSE) %>%
   transmute(donor = sample, Group = group, source)
@@ -391,9 +378,8 @@ for (nm in names(pl))
   ggsave(file.path(OUTDIR, paste0(nm, "_n76.pdf")), pl[[nm]], width = 5.4, height = 4.4,
          device = cairo_pdf, bg = "transparent")
 
-# A4 portrait, three columns. The previous canvas was 13 x 24 in, which a
-# journal can only place by shrinking the type past legibility; at A4 the type
-# scale below holds every label at 5 pt or more.
+# A4 portrait, three columns; the type scale below holds every label at 5 pt
+# or more.
 tag <- theme(plot.tag = element_text(face = "bold", size = 14))
 small_text <- theme(
   axis.text    = element_text(size = 8, colour = "black"),

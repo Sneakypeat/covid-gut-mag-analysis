@@ -1,5 +1,5 @@
 # =============================================================================
-# Audit item 3, continued: which clade-level summary of a MAG-level result is
+# Which clade-level summary of a MAG-level result is
 # defensible? Three summaries of the same 584 genomes, reported side by side.
 #
 #   B. over-representation: does the clade hold more depleted (or enriched)

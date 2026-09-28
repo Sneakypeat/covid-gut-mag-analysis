@@ -1,11 +1,10 @@
 # =============================================================================
 # Figure 3 functional guilds, 584-MAG catalogue: CLUSTER TUNING
 #
-# How the published figure was built (~/MAG_Analysis/Mags_annotation_Fig3.R):
+# How the guilds are built:
 #   guild LABELS  - Jaccard distance on the binarised DRAM product matrix
 #                   -> UMAP (n_neighbors 15, min_dist 0.1, n_epochs 500, seed 42)
-#                   -> HDBSCAN (minPts 5)  -> 29 clusters, saved as
-#                   df_func_29clusters.rds
+#                   -> HDBSCAN (minPts 5)
 #   plotted LAYOUT - a separate opt-SNE on cosine distance, with those labels
 #                   painted on. Tuning the t-SNE therefore never changes the
 #                   guilds; only the UMAP/HDBSCAN knobs below do.
@@ -108,9 +107,9 @@ embed <- function(nn, md, epochs = 500, seed = 42) {
   umap(D, config = cfg)$layout
 }
 
-# ---- 3. reproduce the published recipe, then sweep --------------------------
+# ---- 3. default recipe, then sweep -------------------------------------------
 
-message("published recipe on the new catalogue ...")
+message("default recipe ...")
 lay_pub <- embed(15, 0.1)
 cl_pub  <- hdbscan(lay_pub, minPts = 5)$cluster
 pub     <- score_clusters(cl_pub) %>% mutate(n_neighbors = 15, min_dist = 0.1, minPts = 5)
@@ -175,7 +174,7 @@ plot_candidate <- function(nn, md, mp, title = NULL) {
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 top6 <- head(ranked, 6)
-p_top <- wrap_plots(c(list(plot_candidate(15, 0.1, 5, "PUBLISHED recipe on 584 MAGs")),
+p_top <- wrap_plots(c(list(plot_candidate(15, 0.1, 5, "Default recipe on 584 MAGs")),
                       lapply(seq_len(nrow(top6)), function(i)
                         plot_candidate(top6$n_neighbors[i], top6$min_dist[i], top6$minPts[i]))),
                     ncol = 4)

@@ -1,6 +1,5 @@
 # =============================================================================
 # Supplementary Figure 5, clustering-method comparison for the functional guilds
-# Rebuild of results/Guild_Validation_Comparison.pdf on the 76-donor catalogue.
 #
 # Five partitions of the same 584 MAGs x 98 DRAM pathway matrix:
 #   Guild    UMAP (nn 15, min_dist 0.05) + HDBSCAN (minPts 6)   -> 30 + noise
@@ -9,7 +8,7 @@
 #   Ward     hierarchical ward.D2 on Jaccard, cut at 30          -> 30
 #   pvclust  the same ward.D2 with 1,000 bootstrap replicates    -> 30
 #
-# Two things the published version did not do, both of which change the reading:
+# Two points that change the reading:
 #
 #   1. pvclust and Ward are the SAME partition (ARI 1.000). pvclust runs ward.D2
 #      on the same distance; it contributes bootstrap support, not an

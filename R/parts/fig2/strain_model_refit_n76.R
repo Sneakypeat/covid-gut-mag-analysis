@@ -1,9 +1,8 @@
 # =============================================================================
-# Audit item 1: the strain model treated repeated genomes but not repeated
-# donors. Each donor contributes up to 20 genomes, so the residuals are nested
-# in donor as well, and the published p = 8.8e-50 is anticonservative.
+# Strain-diversity model. Each donor contributes up to 20 genomes, so the
+# residuals are nested in donor as well as in genome.
 #
-# Refit with crossed random intercepts for genome and donor, plus the
+# Fit with crossed random intercepts for genome and donor, plus the
 # coverage-adjusted and depth-rarefied sensitivities. Effect, 95% CI and p are
 # reported for each.
 #
@@ -41,7 +40,7 @@ say(sprintf("observations %d | genomes %d | donors %d (case %d, control %d)",
             nrow(cmp), n_distinct(cmp$genome), n_distinct(cmp$donor),
             n_distinct(cmp$donor[cmp$Group == "Case"]), n_distinct(cmp$donor[cmp$Group == "Control"])))
 per_donor <- cmp %>% count(donor)
-say(sprintf("genomes measured per donor: median %d, range %d to %d (the repeated measure the old model ignored)",
+say(sprintf("genomes measured per donor: median %d, range %d to %d",
             median(per_donor$n), min(per_donor$n), max(per_donor$n)))
 
 fit_one <- function(form, data, label) {
@@ -59,7 +58,7 @@ say("")
 say("## nucleotide diversity, log10 scale")
 res <- bind_rows(
   fit_one(log10(nucl_diversity + 1e-6) ~ Group + (1 | genome), cmp,
-          "genome only (as published)"),
+          "genome only"),
   fit_one(log10(nucl_diversity + 1e-6) ~ Group + (1 | genome) + (1 | donor), cmp,
           "genome + donor"),
   fit_one(log10(nucl_diversity + 1e-6) ~ Group + log10(coverage) + (1 | genome) + (1 | donor), cmp,
@@ -68,7 +67,7 @@ res <- bind_rows(
           cmp %>% filter(!is.na(nucl_diversity_rarefied)), "genome + donor, depth-rarefied")
 )
 
-# how much of the variance sits at the donor level, i.e. what the old model missed
+# how much of the variance sits at the donor level
 m_full <- lmer(log10(nucl_diversity + 1e-6) ~ Group + (1 | genome) + (1 | donor), data = cmp)
 vc <- as.data.frame(VarCorr(m_full))
 say("")

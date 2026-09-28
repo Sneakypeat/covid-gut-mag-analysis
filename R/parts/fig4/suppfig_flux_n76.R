@@ -41,9 +41,8 @@ pa <- ggplot(route, aes(reorder(reaction, n), n, fill = role)) +
   coord_flip(clip = "off") +
   scale_fill_manual(values = c(enzyme = "#2E6E8E", transport = "#C2453B"), name = NULL) +
   scale_y_continuous(expand = expansion(mult = c(0, .18))) +
-  # Rebuilt over the completed 584-model catalogue the panel no longer says
-  # "the export step is simply absent": 18 of the 47 do carry an exchange.
-  # What it does show is that the route is incomplete in most of them, and
+  # Over the 584-model catalogue 18 of the 47 carry an exchange. The panel shows
+  # that the route is incomplete in most of them, and
   # that 14 lose ptb/buk between the gene call and the reconstruction.
   labs(title = "The butyrate route is incomplete in the models that carry the genes",
        subtitle = sprintf("Butyrate-route reactions among the %d modelled genomes DRAM calls ptb/buk-positive",

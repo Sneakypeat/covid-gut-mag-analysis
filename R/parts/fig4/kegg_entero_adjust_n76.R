@@ -4,10 +4,10 @@
 # The same question that was already asked of CAMPER (where all 58 module
 # effects vanished once Enterobacteriaceae abundance entered the model) and of
 # the mobilome (where the difference vanished once those genomes were removed).
-# Here it is asked of the gene catalogue, with the published LinDA settings and
+# Here it is asked of the gene catalogue, with the Figure 4 LinDA settings and
 # one extra term:
 #
-#   published   ~ Group
+#   unadjusted  ~ Group
 #   adjusted    ~ Group + Enterobacteriaceae_log10_z
 #
 # then the same hypergeometric ORA is re-run on the adjusted KO sets, so the 48
@@ -69,7 +69,7 @@ run_linda <- function(formula) {
 say(""); say("## LinDA")
 pub <- run_linda("~ Group")
 adj <- run_linda("~ Group + entero_z")
-say(sprintf("   published ~Group          : %d tested | %d higher in Case | %d higher in Control",
+say(sprintf("   unadjusted ~Group         : %d tested | %d higher in Case | %d higher in Control",
             nrow(pub), sum(pub$Status == "Higher in Case"), sum(pub$Status == "Higher in Control")))
 say(sprintf("   adjusted  ~Group+entero   : %d tested | %d higher in Case | %d higher in Control",
             nrow(adj), sum(adj$Status == "Higher in Case"), sum(adj$Status == "Higher in Control")))
@@ -116,15 +116,15 @@ write_csv(cmp, file.path(OUT, "KEGG_pathway_ORA_entero_adjusted_n76.csv"))
 write_csv(o_adj, file.path(OUT, "KEGG_pathway_ORA_adjusted_full_n76.csv"))
 
 say(""); say("## pathway ORA (BH q < 0.05)")
-say(sprintf("   published model: %d pathways (%d Case, %d Control)", nrow(cmp),
+say(sprintf("   unadjusted model: %d pathways (%d Case, %d Control)", nrow(cmp),
             sum(cmp$dir_pub == "Case"), sum(cmp$dir_pub == "Control")))
-say(sprintf("   adjusted  model: %d pathways total; of the published %d, %d survive with the same direction",
+say(sprintf("   adjusted  model: %d pathways total; of the unadjusted %d, %d survive with the same direction",
             sum(o_adj$q < 0.05), nrow(cmp), sum(cmp$kept)))
 for (d in c("Case", "Control")) {
   sub <- cmp %>% filter(dir_pub == d)
   say(sprintf("   %-8s side: %d of %d survive", d, sum(sub$kept), nrow(sub)))
 }
-say(""); say("   published pathways that do NOT survive adjustment:")
+say(""); say("   unadjusted pathways that do NOT survive adjustment:")
 for (i in which(!cmp$kept)) say(sprintf("      %-52s q %.2g -> %.2g (%s)", cmp$pathway_name[i],
                                         cmp$q_pub[i], cmp$q_adj[i], cmp$dir_adj[i]))
 say(""); say("   top surviving pathways by adjusted q:")

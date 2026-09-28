@@ -245,8 +245,7 @@ theme_c <- theme_bw(base_size = 10) +
 lab_q <- function(q) ifelse(q < 0.001, "q < 0.001", sprintf("q = %.3f", q))
 
 # a. capacity by oxygen requirement and compound class, in one panel
-# Previously nine separate boxplot facets (three oxygen, six class). Merged to a
-# single horizontal panel: the categories share an axis, so they can be read
+# A single horizontal panel: the categories share an axis, so they can be read
 # against each other instead of nine independent y-scales. sqrt x because
 # aromatic hydrocarbon capacity is two orders below non-specific.
 cap_all <- bind_rows(
@@ -283,8 +282,7 @@ pA <- ggplot(cap_all, aes(capacity, key, fill = Group, colour = Group)) +
                   panel.grid.major.y = element_blank())
 
 # b. modules: effect size, carriage breadth and carriage skew in one panel
-# Previously a lollipop (c) and a carriage heatmap (d) sharing the same module
-# axis. Merged: position is the effect size, bubble area is how many MAGs carry
+# Position is the effect size, bubble area is how many MAGs carry
 # the module, fill is the enriched-minus-depleted carriage difference.
 fc <- t_mod %>% filter(q < 0.05) %>%
   left_join(carry_wide %>% select(module, n_carrying, Enriched, Depleted), by = "module") %>%

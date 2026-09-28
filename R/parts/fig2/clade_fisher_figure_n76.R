@@ -1,4 +1,4 @@
-# Rebuild only Figure 1g, 1h and the family-count inset. No ANCOM-BC2 refit.
+# Builds only Figure 1g, 1h and the family-count inset. No ANCOM-BC2 refit.
 # Run: Rscript clade_fisher_figure_n76.R
 # Also sourced by both Figure 1 entry points; sourcing does not execute it.
 #
@@ -60,7 +60,7 @@ build_clade_fisher_panels <- function(
             sum(dat$Status == "Up") == 87L,
             sum(dat$Status == "Down") == 203L,
             sum(dat$Status == "NS") == 294L)
-  # Keep the published GTDB palette; missing taxa fail instead of becoming Other.
+  # Use the fixed GTDB palette; missing taxa fail instead of becoming Other.
   pal <- readRDS(palette_file)
   names(pal) <- trimws(names(pal))
   if (!all(unique(dat$Phylum) %in% names(pal)))

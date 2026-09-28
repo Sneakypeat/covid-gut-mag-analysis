@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """Assemble the supplementary tables for the 76-donor manuscript.
 
-The submitted version shipped six tables. Three of them describe analyses that
-survive into this version and are rebuilt here on the 584-MAG catalogue; the
-other three covered the GO network, the CAZyme/Pfam layers and CAFCA, all of
-which were withdrawn, so their slots are reused rather than renumbered around.
-Everything the rebuilt manuscript reports and does not already show in a figure
-gets a home here.
+Six workbooks. Everything the manuscript reports and does not already show in a
+figure gets a home here.
 
 Each workbook opens with a Cover sheet naming, for every data sheet, the source
 file it was built from and its row count, so a reader can trace any number back
@@ -205,7 +201,7 @@ TABLES = {
 
 # Matrices too large to be worth a worksheet. These are deposited in the Zenodo
 # archive rather than shipped beside the workbooks, so the builder only records
-# where they live; it no longer copies them.
+# where they live.
 DATA_FILES = [
     ("Supplementary_Data_1_camper_module_completeness.csv.gz",
      "fig4/camper_module_completeness_n76.tsv",
@@ -230,8 +226,8 @@ def merge_parts(tables):
 
     The groups are declared separately because each one is a coherent block of
     related sheets and keeping them apart makes the mapping to source files
-    readable; they are merged here because a reviewer would rather open six
-    workbooks than eleven.
+    readable; they are merged here so a reader opens six workbooks rather
+    than eleven.
     """
     out = {}
     for name, sheets in tables.items():

@@ -7,13 +7,9 @@
 #   c  modules carried more often by enriched than depleted MAGs (Fisher, q < 0.05)
 #   d  KO-level shifts, LinDA volcano (the input to the Figure 4c-d ORA)
 #
-# a-c back the CAMPER statements that lost their panel when Figure 4 was
-# reduced to CAMPER a-b plus KEGG c-d. d moved here from the old Supplementary
-# Figure 6, whose other panel (the raw-p < 0.05 pathway butterfly) was dropped
-# as redundant with Figure 4c. Panels a and b are the plot objects
-# written by camper_n76_taxonomy_adjustment.R; c is drawn here from
-# camper_carriage_by_direction_n76.csv (camper_n76.R). The earlier carriage
-# bubble showed only the enriched-minus-depleted skew; c shows both carriage
+# Panels a and b are the plot objects written by
+# camper_n76_taxonomy_adjustment.R; c is drawn here from
+# camper_carriage_by_direction_n76.csv (camper_n76.R) and shows both carriage
 # fractions, which are the numbers the text quotes.
 #
 # The Enterobacteriaceae-conditional model from the same script stays an audit
@@ -171,7 +167,7 @@ ggsave(file.path(OUTDIR, "SuppFig6c_Carriage_n76.pdf"), pC, width = 6.2, height 
 
 # ---- d. KO-level shifts (LinDA volcano) --------------------------------------
 # Plot object from the HPC KEGG pipeline (gene_catalogue_linda_ora_n76.R); only
-# the title is changed (its "c" prefix belonged to the old Figure 4 layout).
+# the title is changed.
 volc <- readRDS(file.path(F4, "kegg_fast/fig4/Fig4cd_KEGG_plot_objects_n76.rds"))
 pD <- volc$panel_c + labs(title = "KEGG orthologue shifts") + theme_transparent
 say(""); say(sprintf("## d. volcano: %s", pD$labels$subtitle))

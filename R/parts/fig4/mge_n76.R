@@ -1,10 +1,10 @@
 # =============================================================================
 # Mobilome of the 76-donor MAG catalogue (geNomad 1.12.0)
 #
-# Asks three things, in order of how much they would change the manuscript:
+# Asks three things:
 #
-#   Q1  Does mobile-element content explain the unexplained contamination
-#       result of changed-claim 7? CheckM2 scores duplicated and foreign
+#   Q1  Does mobile-element content explain the contamination
+#       coefficient in the phylogenetic regression? CheckM2 scores duplicated and foreign
 #       sequence as contamination, and a mis-binned plasmid or free phage
 #       contig is exactly that. If MGE load absorbs the contamination
 #       coefficient, the "assembly artefact" reading becomes a biological one.
@@ -149,7 +149,7 @@ fit_one <- function(dat, label, formula) {
          se = cf[, "StdErr"], p = cf[, pc], n = nrow(dd))
 }
 models <- bind_rows(
-  fit_one(md, "Published-style (no mobilome)",
+  fit_one(md, "Baseline (no mobilome)",
           enriched_case ~ Is_Novel_bin + Completeness + Contamination),
   fit_one(md, "Plus mobilome",
           enriched_case ~ Is_Novel_bin + Completeness + Contamination + mge_pct),
@@ -160,7 +160,7 @@ say("")
 for (i in seq_len(nrow(models))) with(models[i, ],
   if (term != "(Intercept)")
     say(sprintf("   %-30s %-14s beta %+.4f  p = %.3g", model, term, beta, p)))
-b1 <- models %>% filter(model == "Published-style (no mobilome)", term == "Contamination") %>% pull(beta)
+b1 <- models %>% filter(model == "Baseline (no mobilome)", term == "Contamination") %>% pull(beta)
 b2 <- models %>% filter(model == "Plus mobilome", term == "Contamination") %>% pull(beta)
 p2 <- models %>% filter(model == "Plus mobilome", term == "Contamination") %>% pull(p)
 say(sprintf("   contamination coefficient %+.4f -> %+.4f on adding the mobilome (%.0f%% change, p = %.3g)",

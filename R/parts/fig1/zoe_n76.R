@@ -1,20 +1,19 @@
 # =============================================================================
 # ZOE gut-microbiome health rank, recomputed on the 76-donor cohort
 #
-# Two analyses, lifted from reviewer_response.R section 6 so the index formula
-# and the concordance test stay identical to the published ones:
+# Two analyses:
 #
-#   6A  per-SGB concordance  -> correlation figure, SUPPLEMENTARY
+#   A  per-SGB concordance  -> correlation figure, SUPPLEMENTARY
 #       For each SGB detected here, its ZOE health-rank against its Spearman
 #       correlation with case status. Tests whether the species ZOE calls
 #       unfavourable are the ones that rise in COVID.
 #
-#   6B  per-donor health index -> box plot, MAIN Figure 1 panel c
+#   B  per-donor health index -> box plot, MAIN Figure 1 panel c
 #       health_index = sum(rel_ab * (1 - 2*HEALTH_ranks)) / sum(rel_ab),
 #       bounded [-1, 1], higher = healthier.
 #
-# Every one of the 76 donors is profiled at donor level here, so unlike the
-# published version there is no run-level averaging step and no donor collapse.
+# Every one of the 76 donors is profiled at donor level, so there is no
+# run-level averaging step.
 #
 # Outputs -> result2/n76/
 # =============================================================================
@@ -86,7 +85,7 @@ long <- sgb_abundance %>%
   inner_join(rankings, by = "SGB")
 say("SGBs carrying a ZOE rank and detected here: ", length(unique(long$SGB)))
 
-# ---- 6A. per-SGB concordance  (SUPPLEMENTARY correlation figure) ------------
+# ---- A. per-SGB concordance  (SUPPLEMENTARY correlation figure) ------------
 
 per_sgb_cor <- long %>%
   group_by(SGB) %>%
@@ -99,7 +98,7 @@ per_sgb_cor <- long %>%
 conc <- suppressWarnings(cor.test(per_sgb_cor$HEALTH_ranks, per_sgb_cor$cor_with_case,
                                   method = "spearman"))
 rho <- unname(conc$estimate); pval <- conc$p.value
-say(sprintf("6A per-SGB concordance: Spearman rho = %.3f, p = %.3g (n = %d SGBs)",
+say(sprintf("A per-SGB concordance: Spearman rho = %.3f, p = %.3g (n = %d SGBs)",
             rho, pval, nrow(per_sgb_cor)))
 write_csv(per_sgb_cor, file.path(OUTDIR, "ZOE_Concordance_PerSGB_n76.csv"))
 
@@ -123,7 +122,7 @@ pCorr <- ggplot(per_sgb_cor, aes(x = HEALTH_ranks, y = cor_with_case, color = HE
 ggsave(file.path(OUTDIR, "fig1", "SuppFig_ZOE_Concordance_n76.pdf"), pCorr,
        width = 7.5, height = 6.2, device = cairo_pdf, bg = "transparent")
 
-# ---- 6B. per-donor health index  (MAIN figure box plot) --------------------
+# ---- B. per-donor health index  (MAIN figure box plot) --------------------
 
 per_sample <- long %>%
   group_by(orig_col, cohort) %>%
@@ -137,7 +136,7 @@ ci_ctrl  <- per_sample$health_index[per_sample$cohort == "Control"]
 ci_covid <- per_sample$health_index[per_sample$cohort == "COVID"]
 wt <- wilcox.test(ci_covid, ci_ctrl, exact = FALSE)
 cd <- cliffs_delta(ci_covid, ci_ctrl)
-say(sprintf("6B health index (n=%d ctrl vs %d case): Wilcoxon W = %.0f, p = %.3g, Cliff's delta = %.2f",
+say(sprintf("B health index (n=%d ctrl vs %d case): Wilcoxon W = %.0f, p = %.3g, Cliff's delta = %.2f",
             length(ci_ctrl), length(ci_covid), wt$statistic, wt$p.value, cd))
 say(sprintf("   medians: Control %.3f (range %.3f to %.3f) ; COVID %.3f (range %.3f to %.3f)",
             median(ci_ctrl), min(ci_ctrl), max(ci_ctrl),

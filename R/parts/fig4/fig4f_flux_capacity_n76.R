@@ -41,8 +41,7 @@ LAB <- c(butyrate = "Butyrate", acetate = "Acetate", propionate = "Propionate",
 GCOL <- c(Control = "#00BFC4", Case = "#F8766D")
 
 # FVA table over the full 584-model catalogue. `<p>_max` is the growth-coupled
-# maximum (FVA at fraction_of_optimum = 0.10), the same quantity the earlier
-# 339-model scan called `<p>_growth_coupled`; `<p>_min` is the other end of the
+# maximum (FVA at fraction_of_optimum = 0.10); `<p>_min` is the other end of the
 # interval and is reported in the stats file.
 cap  <- read_csv(file.path(GF, "fva_584.csv"), show_col_types = FALSE) %>%
   rename_with(~ sub("_max$", "_growth_coupled", .x), ends_with("_max"))

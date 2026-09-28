@@ -1,9 +1,6 @@
 # =============================================================================
-# KEGG pathway butterfly plot, rebuilt on n = 76
-# Matches annotation_gene_catalog/Figure7_Butterfly_Pathways.pdf in design, with
-# one deliberate change: the published figure SELECTED pathways at raw p < 0.05
-# (92 of them) while ENCODING signed -log10(FDR) and colouring by FDR. That mixes
-# an unadjusted filter with an adjusted display. Selection here is BH q < 0.05.
+# KEGG pathway butterfly plot, n = 76
+# Pathways are selected at BH q < 0.05 and encoded by signed -log10(FDR).
 # Outputs -> result2/n76/fig4/
 # =============================================================================
 suppressPackageStartupMessages({

@@ -1,17 +1,12 @@
 # =============================================================================
 # Figure 2 statistics, 584-MAG catalogue (578 bacterial tips on the bac120 tree)
 #
-# Transcribed from ~/MAG_Analysis/MAG_tree.R, "MASTER PHYLOGENETIC ANALYSIS
-# SCRIPT" (lines ~1210-1745): global signal, correlogram, taxonomic distance
-# calibration, picante clustering, Blomberg's K, PGLS lambda, phylogenetic
-# logistic regression, node-level Fisher enrichment and local Moran's I.
-# Permutation counts are the published ones (9,999; correlogram 1,000
-# bootstraps over 80 distance classes).
+# Global signal, correlogram, taxonomic distance calibration, picante
+# clustering, Blomberg's K, PGLS lambda, phylogenetic logistic regression,
+# node-level Fisher enrichment and local Moran's I. 9,999 permutations;
+# correlogram 1,000 bootstraps over 80 distance classes.
 #
-# LFC input: the ANCOM-BC2 estimate for EVERY MAG, NA -> 0. This is how
-# Table_S1_MAG_Master_Metadata_v2.csv was built, and that table reproduces
-# Table_S3 (Moran's I = 0.109). The manuscript's 0.127 came from an earlier
-# input table; see RESULTS_n76.md.
+# LFC input: the ANCOM-BC2 estimate for EVERY MAG, NA -> 0.
 #
 # This is slow (the Lambda permutations refit by ML each time), so it writes
 # everything the figure needs to fig2/figure2_stats_n76.rds and figure2_n76.R
@@ -113,7 +108,7 @@ zero_cross <- function(x, y) {
 }
 exact_limit       <- zero_cross(corr_res$d.mean, corr_res$correlation)
 lower_bound_limit <- zero_cross(corr_res$d.mean, corr_res$lower)
-say(sprintf("  zero-crossing of mean Moran's I = %.3f | of lower CI bound (published method) = %.3f",
+say(sprintf("  zero-crossing of mean Moran's I = %.3f | of lower CI bound = %.3f",
             exact_limit, lower_bound_limit))
 say(sprintf("  distance classes significantly positive: %d, negative: %d (of %d)",
             sum(corr_res$sig == "positive"), sum(corr_res$sig == "negative"), nrow(corr_res)))

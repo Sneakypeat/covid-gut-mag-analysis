@@ -1,9 +1,9 @@
 # =============================================================================
 # Figure 3: choosing the guild resolution, with evidence
 #
-# Question: the published recipe (UMAP n_neighbors 15, min_dist 0.1, HDBSCAN
-# minPts 5) gave 29 guilds on 401 MAGs but 38 on this 584-MAG catalogue. Does 38
-# separate functions better, or does it dilute them into near-duplicate guilds?
+# Question: the default recipe (UMAP n_neighbors 15, min_dist 0.1, HDBSCAN
+# minPts 5) gives 38 guilds on this 584-MAG catalogue. Does 38 separate
+# functions better, or does it dilute them into near-duplicate guilds?
 #
 # Four things decide that, none of them visual:
 #   stability   mean adjusted Rand index across 6 UMAP seeds. Over-split
@@ -82,9 +82,9 @@ evaluate <- function(cl) {
 
 cands <- tribble(
   ~label,                      ~nn, ~md,  ~mp,
-  "published recipe",           15, 0.10,  5,
-  "published nn/md, minPts 6",  15, 0.10,  6,
-  "published nn/md, minPts 8",  15, 0.10,  8,
+  "default recipe",             15, 0.10,  5,
+  "default nn/md, minPts 6",    15, 0.10,  6,
+  "default nn/md, minPts 8",    15, 0.10,  8,
   "nn15 md0.05 minPts 6",       15, 0.05,  6,
   "nn20 md0.05 minPts 6",       20, 0.05,  6,
   "nn10 md0.05 minPts 6",       10, 0.05,  6,
