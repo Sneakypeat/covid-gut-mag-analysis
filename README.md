@@ -43,14 +43,6 @@ were written as standalone scripts and reuse short names such as `pA` and
 | `python/` | supplementary-table assembly, the KEGG module builder, the genome trait builder, the MICOM collector, and the two HMP2 external-validation tests |
 | `metabolic_support/` | the support graph behind the acid-requirement row of Figure 4e, the genome trait calls, and their tests |
 
-## What is deliberately not here
-
-Cluster job scripts and SLURM wrappers; the assembly, binning and
-dereplication pipeline that produces the MAG catalogue; the manuscript build
-and the Zenodo deposit staging, which are publication plumbing rather than
-analysis; and the metabolic-support figure and its supporting analyses, which
-were withdrawn from the manuscript.
-
 
 ## Citation
 
