@@ -218,7 +218,7 @@ dist_mat  <- as.matrix(dist_func)[rownames(meta_stat), rownames(meta_stat)]
 set.seed(SEED)
 perm_res <- adonis2(as.dist(dist_mat) ~ Phylum_Plot, data = meta_stat, permutations = 999)
 r2_val <- round(perm_res$R2[1] * 100, 1)
-stat_text <- paste0("PERMANOVA: Phylum explains ", r2_val, "% (p < 0.001)")
+stat_text <- sprintf("PERMANOVA: Phylum explains %.1f%% (p = %.3g)", r2_val, perm_res$`Pr(>F)`[1])
 say(sprintf("PERMANOVA phylum on functional distance: R2 = %.1f%%, p = %.3f", r2_val, perm_res$`Pr(>F)`[1]))
 
 tree <- read.tree(TREE)
@@ -239,7 +239,7 @@ p_cloud <- ggplot(df_mantel, aes(Phylo_Dist, Func_Dist)) +
   geom_smooth(method = "gam", color = "cyan", se = FALSE, linewidth = 2) +
   annotate("label", x = min(df_mantel$Phylo_Dist) + 0.05 * diff(range(df_mantel$Phylo_Dist)),
            y = 0.95 * max(df_mantel$Func_Dist), hjust = 0,
-           label = sprintf("Mantel r = %.2f\np < 0.001\nN = %s pairs", mantel_res$statistic,
+           label = sprintf("Mantel r = %.2f\np = %.3g\nN = %s pairs", mantel_res$statistic, mantel_res$signif,
                            format(nrow(df_mantel), big.mark = ",")),
            fontface = "bold", fill = "white", alpha = 0.8) +
   labs(title = "B. Evolutionary Determinism", x = "Phylo Distance", y = "Function Dissimilarity") +
