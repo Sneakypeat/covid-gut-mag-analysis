@@ -72,7 +72,7 @@ PCOL <- c(Acetate = "#4C6E7A", Formate = "#7FA8B5", Ethanol = "#C9D8DC",
 
 raw <- read_tsv(file.path(GF, "taxon_substrate_use.tsv.gz"), show_col_types = FALSE) %>%
   mutate(across(starts_with(c("uptake_", "secrete_")), ~ replace_na(.x, 0)))
-net <- read_csv(file.path(GF, "micom_net_exchange_71.csv"), show_col_types = FALSE)
+net <- read_csv(file.path(GF, "micom_net_exchange_76.csv"), show_col_types = FALSE)
 cap <- read_csv(file.path(N76, "fig4/Fig4f_flux_capacity_per_donor_n76.csv"),
                 show_col_types = FALSE)
 
@@ -100,8 +100,8 @@ mat_exported[mat_exported < 0] <- 0   # a net-consumed metabolite is not an expo
 
 stopifnot(all(rowSums(mat_capacity) > 0), all(rowSums(mat_produced) > 0))
 
-say(sprintf("net export as a share of gross production, median over donors: %.3f%%",
-            100 * median(rowSums(mat_exported) / rowSums(mat_produced))))
+export_share <- 100 * median(rowSums(mat_exported) / rowSums(mat_produced))
+say(sprintf("net export as a share of gross production, median over donors: %.3f%%", export_share))
 say(sprintf("donors with any net export: %d of %d", sum(rowSums(mat_exported) > 0), length(donors)))
 say("")
 say("Community totals per donor, mmol per gDW per hour (median)")
@@ -250,9 +250,7 @@ pb <- ggplot() +
   scale_y_continuous(breaks = NULL, expand = expansion(mult = .02)) +
   coord_cartesian(clip = "off") +
   labs(title = "(ii)  Capacity against predicted use",
-       subtitle = paste("Mean share of each stage, per arm. Stages are normalised separately:",
-                        "capacity is a per-genome ceiling,\nproduced and exported are the",
-                        "community solution before and after its own cross-feeding."),
+       subtitle = "Mean share per stage and arm; each stage normalised separately",
        x = NULL, y = NULL) +
   guides(fill = guide_legend(nrow = 2)) +
   theme_classic(base_size = 8) +
@@ -277,13 +275,7 @@ pa <- pa + editable_theme
 pb <- pb + editable_theme
 
 p <- pa / pb + plot_layout(heights = c(4, 6)) +
-  plot_annotation(caption = paste(
-    "MICOM cooperative tradeoff at fraction 0.5 on a western-diet colonic medium,",
-    "71 of 76 donors solved.\nNet export is a median 0.02% of gross production, so",
-    "almost everything produced is consumed within the community.\nPredicted fluxes",
-    "under one stated diet, not rates and not measurements."),
-    theme = theme(plot.background = element_blank(),
-                  plot.caption = element_text(size = 5.5, colour = "grey35", hjust = 0)))
+  plot_annotation(theme = theme(plot.background = element_blank()))
 
 ggsave(file.path(OUTDIR, "Fig4f_CapacityVsUse_n76.pdf"), p, width = 6.4, height = 6.2,
        units = "in", device = cairo_pdf, bg = "transparent")

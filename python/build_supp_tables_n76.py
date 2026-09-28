@@ -22,6 +22,7 @@ Usage: build_supp_tables_n76.py [--outdir <dir>]
 import argparse
 import gzip
 import os
+import re
 import shutil
 import sys
 
@@ -151,7 +152,7 @@ TABLES = {
          "Same with Enterobacteriaceae removed from the weighting"),
         ("Entero_attribution", "fig4/Fig4f_entero_attribution_n76.csv",
          "Enterobacteriaceae share of predicted capacity per product"),
-        ("Community_growth_exchange", "metabolic_support/gapfill_v1/micom_net_exchange_71.csv",
+        ("Community_growth_exchange", "metabolic_support/gapfill_v1/micom_net_exchange_76.csv",
          "MICOM community growth rate and net exchange, 71 donors"),
         ("Substrate_use_tests", "fig4/Fig4f_substrate_use_tests_n76.csv",
          "Community nutrient use and product yield"),
@@ -243,7 +244,27 @@ def read_any(path):
     sep = "\t" if path.endswith((".tsv", ".tsv.gz")) else ","
     opener = gzip.open if path.endswith(".gz") else open
     with opener(path, "rt", encoding="utf-8", errors="replace") as fh:
-        return pd.read_csv(fh, sep=sep, low_memory=False)
+        df = pd.read_csv(fh, sep=sep, low_memory=False)
+    return strip_paths(df)
+
+
+ABS_PATH = re.compile(r"^(?:/|[A-Za-z]:\\)\S*[/\\]")
+
+
+def strip_paths(df):
+    """Reduce absolute paths to basenames.
+
+    Some inputs carry the cluster location of each read file, assembly or bin
+    (`read1`, `assembly_dir`, `source_fasta`), which names the account the
+    pipeline ran under. The basename keeps the sample or bin identifier, so
+    joins still work; the directory is private and is dropped.
+    """
+    for col in df.columns:
+        if df[col].dtype == object:
+            df[col] = df[col].map(
+                lambda v: os.path.basename(v.rstrip("/\\"))
+                if isinstance(v, str) and ABS_PATH.match(v) else v)
+    return df
 
 
 def main():

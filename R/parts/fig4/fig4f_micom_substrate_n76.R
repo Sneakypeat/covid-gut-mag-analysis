@@ -70,7 +70,7 @@ don <- raw %>% group_by(sample_id, group) %>%
   summarise(across(starts_with(c("uptake_", "secrete_")), sum), .groups = "drop") %>%
   mutate(named_total = rowSums(across(all_of(names(NUT)))),
          product_total = rowSums(across(all_of(names(PROD)))))
-stopifnot(nrow(don) == 71, all(don$named_total > 0), all(don$uptake_total > 0))
+stopifnot(nrow(don) == 76, all(don$named_total > 0), all(don$uptake_total > 0))
 don$group <- factor(don$group, levels = c("Control", "Case"))
 
 say(sprintf("donors solved: %d case, %d control",
@@ -190,7 +190,7 @@ pb <- panel(pro_l, pro_t, "% of total exchange uptake flux (yield)",
 p4f <- pa / pb + plot_layout(heights = c(4, 7), guides = "collect") +
   plot_annotation(caption = paste(
     "MICOM cooperative tradeoff at fraction 0.5 on a western-diet colonic medium,",
-    "71 of 76 donors solved.\nPredicted community fluxes under one stated diet,",
+    sprintf("%d of 76 donors solved.\nPredicted community fluxes under one stated diet,", nrow(don)),
     "not rates and not measurements."),
     theme = theme(plot.caption = element_text(size = 5.5, colour = "grey35", hjust = 0),
                   legend.position = "bottom"))
