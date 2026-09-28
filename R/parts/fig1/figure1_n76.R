@@ -165,12 +165,26 @@ plot_ancombc2_volcano <- function(df, outdir, pal, q_line = 0.05, label_y = 7.5,
   df <- df %>% mutate(
     fill_col   = shade_by_prev(base_col, p_scaled),
     stroke_col = if_else(sig, scales::alpha(base_col, 1) %>% colorspace::darken(0.3), "grey20"))
-  abbreviate_binom <- function(x) sapply(x, function(s) {
-    if (is.na(s) || !nzchar(s)) return(s)
-    parts <- strsplit(s, "\\s+")[[1]]
-    if (length(parts) < 2) return(s)
-    paste0(substr(parts[1],1,1), ". ", paste(parts[-1], collapse=" "))
-  })
+  # Abbreviate each genus to the shortest prefix no other labelled genus shares,
+  # so no initial is ambiguous (An. Anthropogastromicrobium, Ah. Anaerobutyricum).
+  abbreviate_binom <- function(x) {
+    genus <- sub("\\s.*$", "", x)
+    gs <- unique(genus[grepl("\\s", x)])
+    pre <- vapply(gs, function(g) {
+      for (k in seq_len(nchar(g))) {
+        p <- substr(g, 1, k)
+        if (sum(substr(gs, 1, k) == p) == 1) return(p)
+      }
+      g
+    }, character(1))
+    # conventional two-letter forms where the plain prefix reads badly
+    fixed <- c(Anthropogastromicrobium = "An", Anaerobutyricum = "Ah",
+               Lactobacillus = "Lb", Limivivens = "Lv", Limosilactobacillus = "Ls")
+    hit <- intersect(names(fixed), gs)
+    pre[hit] <- fixed[hit]
+    ifelse(is.na(x) | !grepl("\\s", x), x,
+           paste0(pre[genus], ". ", sub("^\\S+\\s+", "", x)))
+  }
   lab_df <- df %>% filter(sig, -log10(q_plot) > label_y) %>%
     mutate(label_abbr = abbreviate_binom(label))
   ggplot(df, aes(x = lfc, y = -log10(q_plot))) +
